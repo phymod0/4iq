@@ -53,11 +53,34 @@ static void remove_trailing_newline(char *text)
 }
 
 
-static void write_text(char *text, FILE *fd)
+static inline int printable(unsigned char c)
+{
+	return 32 <= c && c <= 126;
+}
+
+
+static inline int has_nonprintable(char *text)
+{
+	for (; *text; ++text)
+	if (!printable(*text))
+		return 1;
+	return 0;
+}
+
+
+static inline void write_if_printable(char *text, FILE *fd)
+{
+	if (has_nonprintable(text))
+		return;
+	fprintf(fd, "%s\n", text);
+}
+
+
+static inline void write_text(char *text, FILE *fd)
 {
 	remove_trailing_newline(text);
 	if (strlen(text) > 0)
-		fprintf(fd, "%s\n", text);
+		write_if_printable(text, fd);
 	return;
 }
 

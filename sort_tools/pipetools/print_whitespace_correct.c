@@ -39,7 +39,8 @@ static char* corrected_line(char *line)
 static int is_bad_line(char *line, char **corrected)
 {
 	*corrected = corrected_line(line);
-	return line != *corrected;
+	// return line != *corrected;
+    return 0;
 }
 
 
